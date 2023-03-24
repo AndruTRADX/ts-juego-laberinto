@@ -126,9 +126,17 @@ function moveByKeys(event: { key: any }) {
 }
 
 // ejecutamos la función solo cuando cargue el HTML y cambie el tamaño de la pantalla
-startGameBtn.addEventListener('click', () => { gameInit = true; setCanvasSize() })
-Reset.addEventListener('click', () => { gameInit = true; setCanvasSize() })
-window.addEventListener('resize', setCanvasSize)
+function resetParams() {
+  level = 0
+  lives = 3
+  timeStart = undefined
+  clearInterval(timeInterval)
+  setCanvasSize() 
+}
+
+startGameBtn.addEventListener('click', () => { gameInit = true; resetParams()})
+Reset.addEventListener('click', () => resetParams())
+window.addEventListener('resize', ()=> resetParams())
 
 // definimos una función que renderiza el tamaño del canvas en base al tamaño de la pantalla
 function setCanvasSize() {
