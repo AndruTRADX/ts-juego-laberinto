@@ -8,6 +8,7 @@
     <title>Vite + TS</title>
   </head>
   <body>
+    
     <div id="modal-start-game" class="relative z-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
       <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
     
@@ -30,6 +31,61 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <div id="modal-game-over" class="relative z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+    
+      <div class="fixed inset-0 z-10 overflow-y-auto">
+        <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+          <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xs">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <div class="sm:flex sm:items-start">
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                  <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Game lost</h3>
+                  <div class="mt-2">
+                    <p class="text-sm text-gray-500">Perdiste todas tus vidas :(</p>
+                    <p class="text-sm text-gray-500">¿Deseas continuar jugando?</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="border-t border-gray-300 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+              <button id="start-game-after" type="button" class="inline-flex w-full justify-center rounded-md border-2 border-gray-200  hover:border-cyan-300 bg-white px-3 py-2 text-sm font-semibold text-gray-600 shadow-sm hover:bg-gray-50 sm:ml-3 sm:w-auto">Continuar</button>
+              <button id="no-continue" type="button" class="inline-flex w-full justify-center mt-2 sm:mt-0 rounded-md border-2 border-gray-200  hover:border-red-300 bg-white px-3 py-2 text-sm font-semibold text-gray-600 shadow-sm hover:bg-gray-50 sm:ml-3 sm:w-auto">Cancelar</button>
+            </div>
+              
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-game-win" class="relative z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+    
+      <div class="fixed inset-0 z-10 overflow-y-auto">
+        <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+          <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xs">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <div class="sm:flex sm:items-start">
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                  <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Game Win</h3>
+                  <div class="mt-2">
+                    <p class="text-sm text-gray-500 pb-1">¡Felicidades! Completaste el juego</p>
+                    <p class="text-sm leading-6 text-gray-500 whitespace-no-wrap">Vidas: <span id="lives-2"></span></p>
+                    <p class="text-sm font-normal leading-6 text-gray-500 whitespace-no-wrap">Tiempo: ⏱️<span id="time-2" class="text-cyan-400 font-medium"></span></p>
+                    <p class="text-sm font-normal leading-6 text-gray-500 whitespace-no-wrap">Record: 🏁<span id="record-2" class="text-cyan-400 font-medium"></span></p>
+                    <p id="win-message" class="text-sm text-gray-500 pt-1"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="border-t border-gray-300 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+              <button id="finish" type="button" class="inline-flex w-full justify-center mt-2 sm:mt-0 rounded-md border-2 border-gray-200  hover:border-cyan-300 bg-white px-3 py-2 text-sm font-semibold text-gray-600 shadow-sm hover:bg-gray-50 sm:ml-3 sm:w-auto">Continuar</button>
+          </div>
+        </div>
+      </div>
+    </div>
     </div>
 
     <main class="flex w-full flex-col justify-center items-center">
@@ -86,10 +142,8 @@
             start
           </button>
         </div>
-    </div>
-  
-    
-    
+      </div>
+
     </main>
     <script type="module" src="/src/main.ts"></script>
   </body>

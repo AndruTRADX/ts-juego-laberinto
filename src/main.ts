@@ -48,13 +48,22 @@ const rightBtn = document.getElementById('right')!
 const downBtn = document.getElementById('down')!
 const startGameBtn = document.getElementById('start-game')!
 const ModalStartGameBtn = document.getElementById('modal-start-game')!
+const ModalGameOver = document.getElementById('modal-game-over')!
+const ModalGameWin = document.getElementById('modal-game-win')!
+const GameWinContinueBtn = document.getElementById('finish')!
+const GameWinMessage = document.getElementById('win-message')!
+const GameOverContinueBtn = document.getElementById('start-game-after')!
+const GameOverCancelBtn = document.getElementById('no-continue')!
 
 // seleccionamos el span donde irán las vidas y el tiempo de juego
 const spanLives = document.getElementById('lives')!
 const spanTime = document.getElementById('time')!
+const spanLivesTwo = document.getElementById('lives-2')!
+const spanTimeTwo = document.getElementById('time-2')!
 
 // seleccionamos donde iran tanto el record como el resultado en base a este
 const spanRecord = document.getElementById('record')!
+const spanRecordTwo = document.getElementById('record-2')!
 
 // cuando hagamos click, ejecutamos su función correspondiente
 upBtn.addEventListener('click', moveUp)
@@ -123,102 +132,104 @@ function setCanvasSize() {
     ? canvasSize = window.innerWidth * 0.65
     : canvasSize = window.innerHeight * 0.65
 
-  Number(canvasSize.toFixed(0))
-  canvas?.setAttribute('width', String(canvasSize))
-  canvas?.setAttribute('height', String(canvasSize))
+    Number(canvasSize.toFixed(0))
+    canvas?.setAttribute('width', String(canvasSize))
+    canvas?.setAttribute('height', String(canvasSize))
 
-  elementsSize = canvasSize / cellsQuantity
+    elementsSize = canvasSize / cellsQuantity
 
-  playerPosition.x = undefined
-  playerPosition.y = undefined
+    playerPosition.x = undefined
+    playerPosition.y = undefined
 
-  // cuando renderice el canvas iniciamos el juego
-  startGame()
+    // cuando renderice el canvas iniciamos el juego
+    startGame()
 
-  if(ModalStartGameBtn) {
-    ModalStartGameBtn.style.display = 'none' 
-  }
+    if(ModalStartGameBtn) {
+      ModalStartGameBtn.style.display = 'none' 
+    }
   }
 }
 
 // el juego inicia
 export function startGame() {
-  if(game) {
-    // seleccionamos el mapa
-    const map = maps[level]
-    
-    // si no hay más mapas
-    if(!map) {
-      // ganas el juego
-      gameWin()
-      // terminamos todos los procesos
-      return
-    }
-
-    // si el tiempo iniciado no tiene un valor
-    if (!timeStart) {
-      timeStart = Date.now()
-      clearInterval(timeInterval)
-      timeInterval = setInterval(showTime, 100)
-      showRecord()
-    }
-    
-    // creamos la primera fila y luego la dividimos para tener todo el mapeado con un array bidimencional
-    const mapRows: string[] = map.trim().split('\n')
-    const mapRowsCols: string[][] = mapRows.map(row => row.trim().split(''))
-
-    // definimos el tamaño del texto y donde se va a centrar
-    game.font = `${elementsSize * 0.95}px Verdana`
-    game.textAlign = 'right'
-
-    // limpiamos la posición de los enemigos
-    enemiesPositions = []
-
-    // limpiamos el canvas en caso de que haya algo
-    game.clearRect(0, 0, canvasSize, canvasSize)
-
-
-    // recorremos el mapa
-    mapRowsCols.forEach((row, rowI) => {
-      // el mapa renderizará los objetos que definimos en los emogis
-      row.forEach((col, colI) => {
-        const mapGame = emojis[col]
-        const posX = elementsSize * (colI + 1)
-        const posY = elementsSize * (rowI + 1)
-
-        // el jugador iniciará en la posición donde este la puerta
-        if(col === 'O') {
-          // solo renerizará si NO hay ninguna posición asignada por los movimientos
-          if (!playerPosition.x && !playerPosition.y) {
-            playerPosition.x = posX
-            playerPosition.y = posY
+  if (gameInit == true) {
+    if(game) {
+      // seleccionamos el mapa
+      const map = maps[level]
+      
+      // si no hay más mapas
+      if(!map) {
+        // ganas el juego
+        gameWin()
+        // terminamos todos los procesos
+        return
+      }
+  
+      // si el tiempo iniciado no tiene un valor
+      if (!timeStart) {
+        timeStart = Date.now()
+        clearInterval(timeInterval)
+        timeInterval = setInterval(showTime, 100)
+        showRecord()
+      }
+      
+      // creamos la primera fila y luego la dividimos para tener todo el mapeado con un array bidimencional
+      const mapRows: string[] = map.trim().split('\n')
+      const mapRowsCols: string[][] = mapRows.map(row => row.trim().split(''))
+  
+      // definimos el tamaño del texto y donde se va a centrar
+      game.font = `${elementsSize * 0.95}px Verdana`
+      game.textAlign = 'right'
+  
+      // limpiamos la posición de los enemigos
+      enemiesPositions = []
+  
+      // limpiamos el canvas en caso de que haya algo
+      game.clearRect(0, 0, canvasSize, canvasSize)
+  
+  
+      // recorremos el mapa
+      mapRowsCols.forEach((row, rowI) => {
+        // el mapa renderizará los objetos que definimos en los emogis
+        row.forEach((col, colI) => {
+          const mapGame = emojis[col]
+          const posX = elementsSize * (colI + 1)
+          const posY = elementsSize * (rowI + 1)
+  
+          // el jugador iniciará en la posición donde este la puerta
+          if(col === 'O') {
+            // solo renerizará si NO hay ninguna posición asignada por los movimientos
+            if (!playerPosition.x && !playerPosition.y) {
+              playerPosition.x = posX
+              playerPosition.y = posY
+            }
+          } 
+          
+          // preguntamos si la posición de la meta
+          else if (col === 'I') {
+            giftPosition.x = posX
+            giftPosition.y = posY
           }
-        } 
-        
-        // preguntamos si la posición de la meta
-        else if (col === 'I') {
-          giftPosition.x = posX
-          giftPosition.y = posY
-        }
-
-        // preguntamos la posición de los enemigos y la añadimos a un arreglo
-        else if (col === 'X') {
-          enemiesPositions.push({
-            x: posX,
-            y: posY,
-          })
-        }
-
-        // renderizamos el mapa, los objetos y la posición de los objetos
-        game.fillText(mapGame, posX, posY)
-
-        // renderizamos las vidas
-        showLives()
+  
+          // preguntamos la posición de los enemigos y la añadimos a un arreglo
+          else if (col === 'X') {
+            enemiesPositions.push({
+              x: posX,
+              y: posY,
+            })
+          }
+  
+          // renderizamos el mapa, los objetos y la posición de los objetos
+          game.fillText(mapGame, posX, posY)
+  
+          // renderizamos las vidas
+          showLives()
+        })
       })
-    })
-
-    // renderizamos al jugador en la posición inicial
-    movePlayer()
+  
+      // renderizamos al jugador en la posición inicial
+      movePlayer()
+    }
   }
 }
 
@@ -261,6 +272,9 @@ function gameWin() {
   if(timeStart) {
     // paramos el timeInterval
     clearInterval(timeInterval)
+    gameInit = false
+
+    ModalGameWin.classList.remove('hidden')
 
     // obtenemos el tiempo record
     const recordTime: num = Number(localStorage.getItem('record_time'))
@@ -274,14 +288,27 @@ function gameWin() {
       if(recordTime > playerTime) {
         // asignamos nuevo record que es igual al tiempo del jugador
         localStorage.setItem('record_time', String(playerTime))
-      } 
+        GameWinMessage.innerText = '🎉 Superaste tu record 🎉'
+      } else {
+        GameWinMessage.innerText = 'Sigue intentando superar tu record'
+      }
     } else {
       // si no existe un record añadimos el record actual
       localStorage.setItem('record_time', String(playerTime))
+      GameWinMessage.innerText = '¡Genial! Ahora puedes intentar superar tu record actual'
     }
 
     // mostramos el record
     showRecord()
+    GameWinContinueBtn.addEventListener('click', ()=> { 
+      level = 0
+      lives = 3
+      timeStart = undefined
+      clearInterval(timeInterval)
+      
+      ModalGameWin.classList.add('hidden');
+      ModalStartGameBtn.style.display = 'block'
+    })
   }
 }
 
@@ -296,6 +323,13 @@ function gameFail() {
     level = 0
     lives = 3
     timeStart = undefined
+    clearInterval(timeInterval)
+    gameInit = false
+
+    ModalGameOver.classList.remove('hidden')
+    ModalStartGameBtn.style.display = 'none'
+    GameOverContinueBtn.addEventListener('click', ()=> { gameInit = true; ModalGameOver.classList.add('hidden'); startGame() })
+    GameOverCancelBtn.addEventListener('click', ()=> { ModalGameOver.classList.add('hidden'); ModalStartGameBtn.style.display = 'block' })
   }
 
   // volver a la posición inicial
@@ -307,6 +341,7 @@ function gameFail() {
 // cantidad de vidas
 function showLives() {
   spanLives.innerHTML = emojis["HEART"].repeat(lives)
+  spanLivesTwo.innerHTML = emojis["HEART"].repeat(lives)
 }
 
 // tiempo de juego
@@ -317,6 +352,7 @@ function showTime() {
 
     const formattedTime = timeFormath(milliInterval)
     spanTime.innerHTML = formattedTime
+    spanTimeTwo.innerHTML = formattedTime
   }
 }
 
@@ -326,6 +362,7 @@ function showRecord() {
 
   const formattedTime = timeFormath(record)
   spanRecord.innerHTML = formattedTime
+  spanRecordTwo.innerHTML = formattedTime
 }
 
 
