@@ -36,6 +36,7 @@ export let lives: num = 3
 export let timeStart: num | undefined
 export let timeInterval: num | undefined
 export let gameInit: boolean = false
+export let screenWidth: number
 
 // seleccionamos el canvas y definimos su contexto
 const canvas = document.querySelector('#game') as HTMLCanvasElement
@@ -127,10 +128,16 @@ window.addEventListener('resize', setCanvasSize)
 
 // definimos una función que renderiza el tamaño del canvas en base al tamaño de la pantalla
 function setCanvasSize() {
+  if(window.innerWidth < 500) {
+    screenWidth = 0.875
+  } else {
+    screenWidth = 0.65
+  }
+
   if(gameInit === true) {
     window.innerHeight > window.innerWidth
-    ? canvasSize = window.innerWidth * 0.65
-    : canvasSize = window.innerHeight * 0.65
+    ? canvasSize = window.innerWidth * screenWidth
+    : canvasSize = window.innerHeight * screenWidth
 
     Number(canvasSize.toFixed(0))
     canvas?.setAttribute('width', String(canvasSize))
@@ -141,12 +148,12 @@ function setCanvasSize() {
     playerPosition.x = undefined
     playerPosition.y = undefined
 
-    // cuando renderice el canvas iniciamos el juego
-    startGame()
-
     if(ModalStartGameBtn) {
       ModalStartGameBtn.style.display = 'none' 
     }
+
+    // cuando renderice el canvas iniciamos el juego
+    startGame()
   }
 }
 
