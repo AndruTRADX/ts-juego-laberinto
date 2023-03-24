@@ -55,6 +55,9 @@ const GameWinContinueBtn = document.getElementById('finish')!
 const GameWinMessage = document.getElementById('win-message')!
 const GameOverContinueBtn = document.getElementById('start-game-after')!
 const GameOverCancelBtn = document.getElementById('no-continue')!
+const ModalCounter = document.getElementById('modal-counter')!
+const Counter = document.getElementById('counter')!
+const Reset = document.getElementById('reset')!
 
 // seleccionamos el span donde irán las vidas y el tiempo de juego
 const spanLives = document.getElementById('lives')!
@@ -124,6 +127,7 @@ function moveByKeys(event: { key: any }) {
 
 // ejecutamos la función solo cuando cargue el HTML y cambie el tamaño de la pantalla
 startGameBtn.addEventListener('click', () => { gameInit = true; setCanvasSize() })
+Reset.addEventListener('click', () => { gameInit = true; setCanvasSize() })
 window.addEventListener('resize', setCanvasSize)
 
 // definimos una función que renderiza el tamaño del canvas en base al tamaño de la pantalla
@@ -152,8 +156,20 @@ function setCanvasSize() {
       ModalStartGameBtn.style.display = 'none' 
     }
 
+    ModalCounter.classList.remove('hidden')
     // cuando renderice el canvas iniciamos el juego
-    startGame()
+    let i = 2
+    Counter.innerText = '3'
+
+    const countdown = setInterval(() => {
+      Counter.innerText = (String(i))
+      i--
+      if (i < 0) {
+        clearInterval(countdown)
+        ModalCounter.classList.add('hidden')
+        startGame()
+      }
+    }, 1000)
   }
 }
 
@@ -335,7 +351,7 @@ function gameFail() {
 
     ModalGameOver.classList.remove('hidden')
     ModalStartGameBtn.style.display = 'none'
-    GameOverContinueBtn.addEventListener('click', ()=> { gameInit = true; ModalGameOver.classList.add('hidden'); startGame() })
+    GameOverContinueBtn.addEventListener('click', ()=> { gameInit = true; ModalGameOver.classList.add('hidden'); setCanvasSize() })
     GameOverCancelBtn.addEventListener('click', ()=> { ModalGameOver.classList.add('hidden'); ModalStartGameBtn.style.display = 'block' })
   }
 
