@@ -119,10 +119,10 @@ window.addEventListener('keydown', moveByKeys)
 function moveByKeys(event: { key: any }) {
   const key = event.key
 
-  if (key === 'ArrowUp' || key === 'w') moveUp()
-  else if (key === 'ArrowLeft' || key === 'a') moveLeft()
-  else if (key === 'ArrowRight' || key === 'd') moveRight()
-  else if (key === 'ArrowDown' || key === 's') moveDown()
+  if (key === 'ArrowUp' || key === 'w' || key === 'W') moveUp()
+  else if (key === 'ArrowLeft' || key === 'a' || key === 'A') moveLeft()
+  else if (key === 'ArrowRight' || key === 'd' || key === 'D') moveRight()
+  else if (key === 'ArrowDown' || key === 's' || key === 'S') moveDown()
 }
 
 // ejecutamos la función solo cuando cargue el HTML y cambie el tamaño de la pantalla
